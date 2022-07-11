@@ -9,6 +9,16 @@
       "name": "Tomek",
       "age": 36,
       "id": 2
+    },
+    {
+      "name": "Tomek",
+      "age": 20,
+      "id": 3
+    },
+    {
+      "name": "Tomek",
+      "age": 20,
+      "id": 4
     }
   ]
 }
