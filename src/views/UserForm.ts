@@ -1,10 +1,20 @@
+import { User } from '../models/User';
+
 export class UserForm {
-  constructor(public parent: Element) {}
+  constructor(public parent: Element, public model: User) {
+    this.bindModel();
+  }
+
+  bindModel(): void {
+    this.model.on('change', () => {
+      this.render();
+    })
+  }
 
   eventsMap(): { [key: string]: () => void } {
     return {
-      'click:button': this.onButtonClick,
-      'mouseenter:h1': this.onHeaderHover
+      'click:.set-age': this.onSetAgeClick,
+      'click:.set-name': this.onSetNameClick
     }
   }
 
@@ -19,28 +29,40 @@ export class UserForm {
     }
   }
 
-  onHeaderHover = () => {
-    console.log('header hovered')
+  onSetAgeClick = (): void => {
+    this.model.setRandomAge();
   }
 
-  onButtonClick = () => {
-    console.log('button clicked')
+  onSetNameClick = (): void => {
+    const input = this.parent.querySelector('input');
+
+    if (input) {
+      const newName = input.value;
+      this.model.set({ name: newName });
+    }
   }
 
   template(): string {
     return `
       <div>
         <h1>User form</h1>
+        <div>User name: ${this.model.get('name')}</div>
+        <div>User age: ${this.model.get('age')}</div>
         <input />
-        <button>Click me</button>
+        <button class="set-name">Change name</button>
+        <button class="set-age">Set random age</button>
       </div>
     `
   }
 
   render(): void {
+    this.parent.innerHTML = '';
+
     const templateElement = document.createElement('template');
     templateElement.innerHTML = this.template();
+
     this.bindEvents(templateElement.content);
+
     this.parent.append(templateElement.content);
   }
 }
