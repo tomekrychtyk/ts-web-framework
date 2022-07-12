@@ -5,12 +5,7 @@ import { Collection } from './models/Collection';
 const rootEl = document.getElementById('root');
 
 if (rootEl) {
-  const users = new Collection(
-    'http://localhost:3000/users',
-    (json: UserProps) => {
-      return User.buildUser(json);
-    }
-  );
+  const users = User.buildUserCollection();
   users.fetch();
   users.on('change', () => {
     new UserList(rootEl, users).render();
